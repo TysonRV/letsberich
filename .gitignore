@@ -1,0 +1,15 @@
+*.egg-info
+*.pyc
+.DS_Store
+.coverage
+.idea
+.tox
+.venv
+.env
+/build
+/dist
+/test-reports
+__pycache__
+_resource
+admin_templates
+*.sqlite3

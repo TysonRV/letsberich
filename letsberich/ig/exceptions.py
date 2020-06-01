@@ -1,0 +1,2 @@
+class IGServiceError(Exception):
+    pass

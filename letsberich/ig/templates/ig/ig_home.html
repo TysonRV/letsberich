@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IG Home</title>
+</head>
+<body>
+    <div>
+        <form action="{% url 'ig-home' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Show Watchlists</button>
+        </form>
+    </div>
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Editable</th>
+                <th>Deleteable</th>
+                <th>Default System Watchlist</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for watchlist in watchlists %}
+            <tr>
+                <td>{{ watchlist.id }}</td>
+                <td>{{ watchlist.name }}</td>
+                <td>{{ watchlist.editable }}</td>
+                <td>{{ watchlist.deleteable }}</td>
+                <td>{{ watchlist.defaultSystemWatchlist }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
