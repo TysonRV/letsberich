@@ -86,11 +86,21 @@ class IGService(object):
         url = self._get_endpoint('WATCHLISTS')
 
         response = self._make_request(url, version='1')
+
         if response.status_code < 300:
             response_dict = json.loads(response.content.decode('utf-8'))
             return response_dict['watchlists']
         else:
             raise IGServiceError
+
+    def get_prices(self):
+        # TODO
+
+        self.get_token()
+
+        url = self._get_endpoint('PRICES').format('KA.D.EZJ.DAILY.IP')
+
+        response = self._make_request(url, version='3')
 
     def _get_endpoint(self, endpoint: str) -> str:
         return self.api_base_url + settings.IG['URLS'][endpoint]
@@ -107,5 +117,5 @@ class IGService(object):
         return response
 
 
-def get_ig_api():
+def get_ig_api() -> IGService:
     return IGService()

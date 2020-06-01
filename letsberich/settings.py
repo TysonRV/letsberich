@@ -134,5 +134,6 @@ IG = {
         'GET_TOKEN': '/session',
         'REFRESH_TOKEN': '/session/refresh-token',
         'WATCHLISTS': '/watchlists',
+        'PRICES': '/prices/{}'
     }
 }
