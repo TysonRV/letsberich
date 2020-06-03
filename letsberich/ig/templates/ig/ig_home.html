@@ -6,6 +6,9 @@
 </head>
 <body>
     <div>
+        {% if api_error %}
+            <div>{{ api_error }}</div>
+        {% endif %}
         <form action="{% url 'ig-home' %}" method="post">
             {% csrf_token %}
             <button type="submit">Show Watchlists</button>
