@@ -58,7 +58,7 @@ class IGService(object):
         expires_in = oauth_token['expires_in']
 
         if renew_cache:
-            cache.set('access_token', access_token, int(expires_in))
+            cache.set('access_token', oauth_token, int(expires_in))
 
         self.headers['Authorization'] = 'Bearer ' + access_token
         self.oauth_token = oauth_token
