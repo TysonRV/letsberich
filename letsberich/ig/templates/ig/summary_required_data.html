@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Useful Data</title>
+</head>
+<body>
+    <div>
+        {% if api_error %}
+            <div>{{ api_error }}</div>
+        {% endif %}
+        <form action="{% url 'account_summary' %}" method="post" >
+            {% csrf_token %}
+            <button type="submit">Show Open Position Data</button>
+        </form>
+    </div>
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>Instrument Name</th>
+                <th>EPIC</th>
+                <th>Day High</th>
+                <th>Day Low</th>
+                <th>Bid</th>
+                <th>Offer</th>
+                <th>Updated at</th>
+                <th>Direction</th>
+                <th>Created at</th>
+                <th>Deal ID</th>
+                <th>Deal Size</th>
+                <th>Stop Level</th>
+                <th>Limit Level</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for data in useful_data %}
+            <tr>
+                <td>{{ data.market.instrumentName }}</td>
+                <td>{{ data.market.epic }}</td>
+                <td>{{ data.market.high }}</td>
+                <td>{{ data.market.low }}</td>
+                <td>{{ data.market.bid }}</td>
+                <td>{{ data.market.offer }}</td>
+                <td>{{ data.market.updateTime }}</td>
+                <td>{{ data.position.direction }}</td>
+                <td>{{ data.position.createdDate }}</td>
+                <td>{{ data.position.dealId }}</td>
+                <td>{{ data.position.size }}</td>
+                <td>{{ data.position.stopLevel }}</td>
+                <td>{{ data.position.limitLevel }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

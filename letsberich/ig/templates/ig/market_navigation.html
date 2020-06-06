@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Market Navigation</title>
+</head>
+<body>
+    <div>
+        {% if api_error %}
+            <div>{{ api_error }}</div>
+        {% endif %}
+        <form action="{% url 'market_navigation' %}" method="post" >
+            {% csrf_token %}
+            <button type="submit">Download Markets</button>
+        </form>
+    </div>
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>Instrument ID</th>
+                <th>Instrument Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for instrument in instrument_list %}
+            <tr>
+                <td><li><a href="{% url 'node_navigation' instrument.id %}">{{ instrument.id }}</a></li></td>
+                <td>{{ instrument.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

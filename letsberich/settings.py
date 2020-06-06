@@ -134,6 +134,10 @@ IG = {
         'GET_TOKEN': '/session',
         'REFRESH_TOKEN': '/session/refresh-token',
         'WATCHLISTS': '/watchlists',
-        'PRICES': '/prices/{}'
+        'PRICES': '/prices/{}',
+        'SPECIFIC_WATCHLIST': '/watchlists/{}',
+        'INSTRUMENT_LIST': '/marketnavigation',
+        'NODE_NAVIGATION': '/marketnavigation/{}',
+        'ACCOUNT_USEFUL_DATA': '/positions'
     }
 }

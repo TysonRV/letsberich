@@ -8,10 +8,11 @@ from requests import Response
 from letsberich.ig.exceptions import IGServiceError
 
 
+
 class IGService(object):
 
     def __init__(self):
-        self.account_id = settings.IG['ACCOUNT_ID_CFD']
+        self.account_id = settings.IG['ACCOUNT_ID_SPREAD_BET']
         self.username = settings.IG['USERNAME']
         self.password = settings.IG['PASSWORD']
         self.api_key = settings.IG['API_KEY']
@@ -93,14 +94,57 @@ class IGService(object):
         else:
             raise IGServiceError
 
+    def get_specific_watchlist(self) -> dict:
+        self.get_token()
+
+        url = self._get_endpoint('SPECIFIC_WATCHLIST').format('Popular Markets')
+        response = self._make_request(url, version='1')
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['markets']
+        else:
+            raise IGServiceError
+
+    def get_navigation_list(self) -> dict:
+        self.get_token()
+
+        url = self._get_endpoint('INSTRUMENT_LIST')
+        response = self._make_request(url, version='1')
+        # import ipdb;ipdb.set_trace()
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['nodes']
+            # import ipdb; ipdb.set_trace()
+        else:
+            raise IGServiceError
+
+    @staticmethod
+    def hello():
+        return 1
+
+    def get_node_list(self, node_id) -> dict:
+        self.get_token()
+
+        url = self._get_endpoint('NODE_NAVIGATION').format(node_id)
+        response = self._make_request(url, version='1')
+        # import ipdb;ipdb.set_trace()
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['nodes']
+            # import ipdb; ipdb.set_trace()
+        else:
+            raise IGServiceError
+
     def get_prices(self):
         # TODO
 
         self.get_token()
 
-        url = self._get_endpoint('PRICES').format('KA.D.EZJ.DAILY.IP')
+        url = self._get_endpoint('PRICES').format('KA.D.VOD.CASH.IP')
 
         response = self._make_request(url, version='3')
+        # import ipdb; ipdb.set_trace()
 
     def _get_endpoint(self, endpoint: str) -> str:
         return self.api_base_url + settings.IG['URLS'][endpoint]
@@ -112,10 +156,22 @@ class IGService(object):
         if method == 'POST':
             response = requests.post(url, json=payload, headers=self.headers)
         else:
+            # import ipdb; ipdb.set_trace()
             response = requests.get(url, headers=self.headers)
 
         return response
 
+    def get_account_useful_data(self):
+        self.get_token()
+        url = self._get_endpoint('ACCOUNT_USEFUL_DATA')
+        response = self._make_request(url, version='2')
+
+        # import ipdb; ipdb.set_trace()
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['positions']
+        else:
+            return IGServiceError
 
 def get_ig_api() -> IGService:
     return IGService()
