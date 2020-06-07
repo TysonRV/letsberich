@@ -173,5 +173,13 @@ class IGService(object):
         else:
             return IGServiceError
 
+    def create_position(self, otc_position: dict) -> Response:
+        self.get_token()
+        url = self._get_endpoint('OPEN_POSITION')
+
+        response = self._make_request(url, payload=otc_position, method='POST', version='2')
+        import ipdb; ipdb.set_trace()
+        return response
+
 def get_ig_api() -> IGService:
     return IGService()

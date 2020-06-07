@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 
 from letsberich.ig.exceptions import IGServiceError
 from letsberich.ig.ig_services import get_ig_api
 
+from letsberich.ig.forms import OpenPositionForm
 
 class IGHome(generic.View):
     ig_api = get_ig_api()
@@ -95,3 +96,34 @@ class IGAccountSummary(generic.View):
             context['api_error'] = api_error
         # import ipdb; ipdb.set_trace()
         return render(request, 'ig/summary_required_data.html', context)
+
+
+class IGOpenPosition(generic.View):
+    ig_api = get_ig_api()
+
+    def get(self, request):
+        form = OpenPositionForm()
+        return render(request, 'ig/open_position.html', {'form': form})
+
+    def post(self, request):
+        context = {}
+        import ipdb; ipdb.set_trace()
+        otc_position = {'currencyCode': request.POST['currencyCode'],
+                        'dealReference': request.POST['dealReference'],
+                        'direction': request.POST['direction'],
+                        'epic': request.POST['epic'],
+                        'expiry': request.POST['expiry'],
+                        'forceOpen': request.POST['forceOpen'],
+                        'guaranteedStop': request.POST['guaranteedStop'],
+                        'orderType': request.POST['orderType'],
+                        'size': request.POST['size'],
+                        'stopLevel': request.POST['stopLevel'],
+                        }
+        # import ipdb; ipdb.set_trace()
+        try:
+            context['dealID'] = self.ig_api.create_position(otc_position)
+            print(context)
+        except IGServiceError as api_error:
+            context['api_error'] = api_error
+
+        return redirect('account_summary')

@@ -138,6 +138,7 @@ IG = {
         'SPECIFIC_WATCHLIST': '/watchlists/{}',
         'INSTRUMENT_LIST': '/marketnavigation',
         'NODE_NAVIGATION': '/marketnavigation/{}',
-        'ACCOUNT_USEFUL_DATA': '/positions'
+        'ACCOUNT_USEFUL_DATA': '/positions',
+        'OPEN_POSITION': '/positions/otc'
     }
 }
