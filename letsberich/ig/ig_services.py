@@ -161,22 +161,36 @@ class IGService(object):
         else:
             raise IGServiceError
 
-    def create_position(self, otc_position_payload: dict) -> Response:
+    def create_position(self, payload: dict) -> Response:
         self.get_token()
         url = self._get_endpoint('OPEN_POSITION')
 
+        cleaned_payload = {
+            'currency_code': payload['currency_code'],
+            'deal_reference': payload['deal_reference'],
+            'direction': payload['direction'],
+            'epic': payload['epic'],
+            'expiry': payload['expiry'].strftime('%Y-%m-%d'),
+            'force_open': payload['force_open'],
+            'guaranteed_stop': payload['guaranteed_stop'],
+            'order_type': payload['order_type'],
+            'size': payload['size'],
+            'stop_level': payload['stop_level'],
+        }
+
         response = self._make_request(
             url,
-            payload=otc_position_payload,
+            payload=cleaned_payload,
             method='POST',
             version='2'
         )
-
         if response.status_code < 300:
             response_dict = json.loads(response.content.decode('utf-8'))
             return response_dict['dealReference']
         else:
-            raise IGServiceError
+            raise IGServiceError(
+                "Error creating a position: {}".format(response.content)
+            )
 
 
 def get_ig_api() -> IGService:

@@ -106,13 +106,18 @@ class IGOpenPosition(generic.View):
         form = OpenPositionForm(data=request.POST)
 
         context = {'form': form}
-
         if form.is_valid():
             try:
-                context['dealReference'] = self.ig_api.create_position(
+                deal_reference = self.ig_api.create_position(
                     form.cleaned_data
                 )
             except IGServiceError as api_error:
                 context['api_error'] = api_error
+            else:
+                position = form.save()
+                position.user = request.user
+                position.save(update_fields=['user'])
+
+                context['deal_reference'] = deal_reference
 
         return render(request, 'ig/open_position.html', context)
