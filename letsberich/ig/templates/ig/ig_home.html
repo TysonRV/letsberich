@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>IG Home</title>
-</head>
-<body>
+{% extends 'ig/base.html' %}
+
+{% block title %}IG Home{% endblock %}
+
+{% block content %}
     <div>
         {% if api_error %}
             <div>{{ api_error }}</div>
@@ -36,5 +34,4 @@
         {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}

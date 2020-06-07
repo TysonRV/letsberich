@@ -1,25 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'ig/base.html' %}
+{% load crispy_forms_tags %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>IG Home</title>
-</head>
-<body>
-    <div>
-        {% if api_error %}
-            <div>{{ api_error }}</div>
-        {% endif %}
+{% block title %}Open Position{% endblock %}
 
-        <form action="{% url 'open-position' %}" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <button type="submit" class="btn btn-success">Open Position</button>
-        </form>
-
+{% block content %}
+    <div class="col-12 p-5">
         <div>
-            {{ dealReference }}
+            {% if api_error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ api_error }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-8 p-2">
+                <form action="{% url 'open-position' %}" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-success">Open Position</button>
+                </form>
+            </div>
+            <div class="col-4">
+                <label><strong>Deal Reference:</strong></label>
+                {{ deal_reference }}
+            </div>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Popular Markets</title>
-</head>
-<body>
+{% extends 'ig/base.html' %}
+
+{% block title %}Popular markets{% endblock %}
+
+{% block content %}
     <div>
         {% if api_error %}
             <div>{{ api_error }}</div>
         {% endif %}
-        <form action="{% url 'ig-popular_markets' %}" method="post" >
+        <form action="{% url 'ig-popular_markets' %}" method="post">
             {% csrf_token %}
             <button type="submit">Show Popular Markets</button>
         </form>
@@ -32,5 +30,4 @@
         {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}
