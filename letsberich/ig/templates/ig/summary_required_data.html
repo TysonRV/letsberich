@@ -9,7 +9,7 @@
         {% if api_error %}
             <div>{{ api_error }}</div>
         {% endif %}
-        <form action="{% url 'account_summary' %}" method="post" >
+        <form action="{% url 'account-summary' %}" method="post" >
             {% csrf_token %}
             <button type="submit">Show Open Position Data</button>
         </form>

@@ -8,7 +8,6 @@ from requests import Response
 from letsberich.ig.exceptions import IGServiceError
 
 
-
 class IGService(object):
 
     def __init__(self):
@@ -21,6 +20,20 @@ class IGService(object):
         self.headers = self.get_headers()
 
         self.oauth_token = None
+
+    def _get_endpoint(self, endpoint: str) -> str:
+        return self.api_base_url + settings.IG['URLS'][endpoint]
+
+    def _make_request(self, url, payload=None, method='GET', version=None) -> Response:
+        if version:
+            self.headers['VERSION'] = version
+
+        if method == 'POST':
+            response = requests.post(url, json=payload, headers=self.headers)
+        else:
+            response = requests.get(url, headers=self.headers)
+
+        return response
 
     def get_headers(self) -> dict:
         headers = {
@@ -111,28 +124,20 @@ class IGService(object):
 
         url = self._get_endpoint('INSTRUMENT_LIST')
         response = self._make_request(url, version='1')
-        # import ipdb;ipdb.set_trace()
         if response.status_code < 300:
             response_dict = json.loads(response.content.decode('utf-8'))
             return response_dict['nodes']
-            # import ipdb; ipdb.set_trace()
         else:
             raise IGServiceError
-
-    @staticmethod
-    def hello():
-        return 1
 
     def get_node_list(self, node_id) -> dict:
         self.get_token()
 
         url = self._get_endpoint('NODE_NAVIGATION').format(node_id)
         response = self._make_request(url, version='1')
-        # import ipdb;ipdb.set_trace()
         if response.status_code < 300:
             response_dict = json.loads(response.content.decode('utf-8'))
             return response_dict['nodes']
-            # import ipdb; ipdb.set_trace()
         else:
             raise IGServiceError
 
@@ -144,42 +149,35 @@ class IGService(object):
         url = self._get_endpoint('PRICES').format('KA.D.VOD.CASH.IP')
 
         response = self._make_request(url, version='3')
-        # import ipdb; ipdb.set_trace()
-
-    def _get_endpoint(self, endpoint: str) -> str:
-        return self.api_base_url + settings.IG['URLS'][endpoint]
-
-    def _make_request(self, url, payload=None, method='GET', version=None) -> Response:
-        if version:
-            self.headers['VERSION'] = version
-
-        if method == 'POST':
-            response = requests.post(url, json=payload, headers=self.headers)
-        else:
-            # import ipdb; ipdb.set_trace()
-            response = requests.get(url, headers=self.headers)
-
-        return response
 
     def get_account_useful_data(self):
         self.get_token()
         url = self._get_endpoint('ACCOUNT_USEFUL_DATA')
         response = self._make_request(url, version='2')
 
-        # import ipdb; ipdb.set_trace()
         if response.status_code < 300:
             response_dict = json.loads(response.content.decode('utf-8'))
             return response_dict['positions']
         else:
-            return IGServiceError
+            raise IGServiceError
 
-    def create_position(self, otc_position: dict) -> Response:
+    def create_position(self, otc_position_payload: dict) -> Response:
         self.get_token()
         url = self._get_endpoint('OPEN_POSITION')
 
-        response = self._make_request(url, payload=otc_position, method='POST', version='2')
-        import ipdb; ipdb.set_trace()
-        return response
+        response = self._make_request(
+            url,
+            payload=otc_position_payload,
+            method='POST',
+            version='2'
+        )
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['dealReference']
+        else:
+            raise IGServiceError
+
 
 def get_ig_api() -> IGService:
     return IGService()

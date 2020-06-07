@@ -9,7 +9,7 @@
         {% if api_error %}
             <div>{{ api_error }}</div>
         {% endif %}
-        <form action="{% url 'market_navigation' %}" method="post" >
+        <form action="{% url 'market-navigation' %}" method="post" >
             {% csrf_token %}
             <button type="submit">Download Markets</button>
         </form>
@@ -24,7 +24,7 @@
         <tbody>
         {% for instrument in instrument_list %}
             <tr>
-                <td><li><a href="{% url 'node_navigation' instrument.id %}">{{ instrument.id }}</a></li></td>
+                <td><li><a href="{% url 'node-navigation' instrument.id %}">{{ instrument.id }}</a></li></td>
                 <td>{{ instrument.name }}</td>
             </tr>
         {% endfor %}
