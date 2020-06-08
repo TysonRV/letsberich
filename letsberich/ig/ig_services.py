@@ -166,18 +166,18 @@ class IGService(object):
         url = self._get_endpoint('OPEN_POSITION')
 
         cleaned_payload = {
-            'currency_code': payload['currency_code'],
-            'deal_reference': payload['deal_reference'],
+            'currencyCode': payload['currency_code'],
+            'dealReference': payload['deal_reference'],
             'direction': payload['direction'],
             'epic': payload['epic'],
-            'expiry': payload['expiry'].strftime('%Y-%m-%d'),
-            'force_open': payload['force_open'],
-            'guaranteed_stop': payload['guaranteed_stop'],
-            'order_type': payload['order_type'],
+            'expiry': payload['expiry'].strftime('%d-%b-%y').upper(),
+            'forceOpen': payload['force_open'],
+            'guaranteedStop': payload['guaranteed_stop'],
+            'orderType': payload['order_type'],
             'size': payload['size'],
-            'stop_level': payload['stop_level'],
+            'stopLevel': payload['stop_level'],
         }
-
+        # import ipdb; ipdb.set_trace()
         response = self._make_request(
             url,
             payload=cleaned_payload,

@@ -114,9 +114,9 @@ class IGOpenPosition(generic.View):
             except IGServiceError as api_error:
                 context['api_error'] = api_error
             else:
-                position = form.save()
-                position.user = request.user
-                position.save(update_fields=['user'])
+                # position = form.save()
+                # position.user = request.user
+                # position.save(update_fields=['user'])
 
                 context['deal_reference'] = deal_reference
 
