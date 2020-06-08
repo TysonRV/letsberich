@@ -177,7 +177,6 @@ class IGService(object):
             'size': payload['size'],
             'stopLevel': payload['stop_level'],
         }
-        # import ipdb; ipdb.set_trace()
         response = self._make_request(
             url,
             payload=cleaned_payload,
@@ -187,21 +186,18 @@ class IGService(object):
 
         if response.status_code < 300:
             response_dict = json.loads(response.content.decode('utf-8'))
-            import ipdb; ipdb.set_trace()
             return response_dict
         else:
             raise IGServiceError("Error creating a position: {}".format(response.content))
 
     def _confirm_position(self, dealRef: dict) -> Response:
         self.get_token()
-        # import ipdb; ipdb.set_trace()
         url = self._get_endpoint('CONFIRM_POSITION').format(dealRef['dealReference'])
         response = self._make_request(url, version='1')
 
         if response.status_code < 300:
             response_dict = json.loads(response.content.decode('utf-8'))
             return response_dict
-            import ipdb; ipdb.set_trace()
         raise IGServiceError("Error creating a position: {}".format(response.content))
 
     def _open_position(self, dealId: dict) -> Response:
@@ -213,7 +209,6 @@ class IGService(object):
         if response.status_code < 300:
             response_dict = json.loads(response.content.decode('utf-8'))
             return response_dict
-            import ipdb; ipdb.set_trace()
         raise IGServiceError("Error creating a position: {}".format(response.content))
 
     def open_position_wrapper(self, payload: dict):
@@ -221,8 +216,8 @@ class IGService(object):
         dealRef = self._create_position(payload)
         dealId = self._confirm_position(dealRef)
         open_position_data = self._open_position(dealId)
-        import ipdb; ipdb.set_trace()
         return open_position_data
+
 
 def get_ig_api() -> IGService:
     return IGService()
