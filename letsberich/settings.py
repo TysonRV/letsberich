@@ -141,7 +141,9 @@ IG = {
         'INSTRUMENT_LIST': '/marketnavigation',
         'NODE_NAVIGATION': '/marketnavigation/{}',
         'ACCOUNT_USEFUL_DATA': '/positions',
-        'OPEN_POSITION': '/positions/otc'
+        'CREATE_POSITION': '/positions/otc',
+        'CONFIRM_POSITION': '/confirms/{}',
+        'OPEN_POSITION': '/positions/{}'
     }
 }
 

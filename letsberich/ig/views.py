@@ -108,7 +108,7 @@ class IGOpenPosition(generic.View):
         context = {'form': form}
         if form.is_valid():
             try:
-                deal_reference = self.ig_api.create_position(
+                created_position_data = self.ig_api.open_position_wrapper(
                     form.cleaned_data
                 )
             except IGServiceError as api_error:
@@ -118,6 +118,6 @@ class IGOpenPosition(generic.View):
                 # position.user = request.user
                 # position.save(update_fields=['user'])
 
-                context['deal_reference'] = deal_reference
+                context['created_position_data'] = created_position_data
 
         return render(request, 'ig/open_position.html', context)
