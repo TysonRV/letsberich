@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import SelectDateWidget
 
 from letsberich.ig.models import Position
 

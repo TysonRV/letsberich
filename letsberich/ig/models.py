@@ -24,7 +24,7 @@ class Position(models.Model):
     )
     expiry = models.CharField(
         max_length=10,
-        help_text="Date in format dd-MMM-yy or DFB"
+        help_text="Date in format dd-MM-yy or DFB"
     )
     force_open = models.BooleanField(default=True,)
     guaranteed_stop = models.BooleanField(default=False,)
