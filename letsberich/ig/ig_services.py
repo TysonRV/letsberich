@@ -161,7 +161,7 @@ class IGService(object):
         else:
             raise IGServiceError
 
-    def _create_position(self, payload: dict) -> Response:
+    def create_position(self, payload: dict) -> dict:
         self.get_token()
         url = self._get_endpoint('CREATE_POSITION')
 
@@ -188,11 +188,14 @@ class IGService(object):
             response_dict = json.loads(response.content.decode('utf-8'))
             return response_dict
         else:
-            raise IGServiceError("Error creating a position: {}".format(response.content))
+            raise IGServiceError(
+                "Error creating a position: {}".format(response.content)
+            )
 
-    def _confirm_position(self, dealRef: dict) -> Response:
+    def confirm_position(self, deal_ref: dict) -> dict:
         self.get_token()
-        url = self._get_endpoint('CONFIRM_POSITION').format(dealRef['dealReference'])
+
+        url = self._get_endpoint('CONFIRM_POSITION').format(deal_ref['dealReference'])
         response = self._make_request(url, version='1')
 
         if response.status_code < 300:
@@ -200,10 +203,10 @@ class IGService(object):
             return response_dict
         raise IGServiceError("Error creating a position: {}".format(response.content))
 
-    def _open_position(self, dealId: dict) -> Response:
+    def open_position(self, deal_id: dict) -> dict:
         self.get_token()
 
-        url = self._get_endpoint('OPEN_POSITION').format(dealId['dealId'])
+        url = self._get_endpoint('OPEN_POSITION').format(deal_id['dealId'])
         response = self._make_request(url, version='2')
 
         if response.status_code < 300:
@@ -213,9 +216,10 @@ class IGService(object):
 
     def open_position_wrapper(self, payload: dict):
         self.get_token()
-        dealRef = self._create_position(payload)
-        dealId = self._confirm_position(dealRef)
-        open_position_data = self._open_position(dealId)
+
+        deal_ref = self.create_position(payload)
+        deal_id = self.confirm_position(deal_ref)
+        open_position_data = self.open_position(deal_id)
         return open_position_data
 
 
