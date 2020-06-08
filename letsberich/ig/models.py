@@ -22,7 +22,10 @@ class Position(models.Model):
         max_length=30,
         help_text="Instrument epic identifier, i.e CS.D.BITCOIN.TODAY.IP"
     )
-    expiry = models.DateField()
+    expiry = models.CharField(
+        max_length=10,
+        help_text="Date in format dd-MMM-yy or DFB"
+    )
     force_open = models.BooleanField(default=True,)
     guaranteed_stop = models.BooleanField(default=False,)
     order_type = models.CharField(

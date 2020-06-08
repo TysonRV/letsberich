@@ -8,7 +8,6 @@ class OpenPositionForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(OpenPositionForm, self).__init__(*args, **kwargs)
-        self.fields['expiry'].widget = SelectDateWidget()
 
     class Meta:
         model = Position

@@ -170,7 +170,7 @@ class IGService(object):
             'dealReference': payload['deal_reference'],
             'direction': payload['direction'],
             'epic': payload['epic'],
-            'expiry': payload['expiry'].strftime('%d-%b-%y').upper(),
+            'expiry': payload['expiry'],
             'forceOpen': payload['force_open'],
             'guaranteedStop': payload['guaranteed_stop'],
             'orderType': payload['order_type'],
@@ -194,7 +194,7 @@ class IGService(object):
 
     def _confirm_position(self, dealRef: dict) -> Response:
         self.get_token()
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
         url = self._get_endpoint('CONFIRM_POSITION').format(dealRef['dealReference'])
         response = self._make_request(url, version='1')
 
