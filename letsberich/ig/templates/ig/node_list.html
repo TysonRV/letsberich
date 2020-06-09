@@ -1,0 +1,27 @@
+{% extends 'ig/base.html' %}
+
+{% block title %}Instrument List{% endblock %}
+
+{% block content %}
+    <div>
+        {% if api_error %}
+            <div>{{ api_error }}</div>
+        {% endif %}
+    </div>
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>Instrument ID</th>
+                <th>Instrument Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for node in node_list %}
+            <tr>
+                <td><a href="{% url 'node-navigation' node.id %}">{{ node.id }}</a></td>
+                <td>{{ node.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

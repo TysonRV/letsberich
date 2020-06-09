@@ -11,7 +11,7 @@ from letsberich.ig.exceptions import IGServiceError
 class IGService(object):
 
     def __init__(self):
-        self.account_id = settings.IG['ACCOUNT_ID_CFD']
+        self.account_id = settings.IG['ACCOUNT_ID_SPREAD_BET']
         self.username = settings.IG['USERNAME']
         self.password = settings.IG['PASSWORD']
         self.api_key = settings.IG['API_KEY']
@@ -20,6 +20,20 @@ class IGService(object):
         self.headers = self.get_headers()
 
         self.oauth_token = None
+
+    def _get_endpoint(self, endpoint: str) -> str:
+        return self.api_base_url + settings.IG['URLS'][endpoint]
+
+    def _make_request(self, url, payload=None, method='GET', version=None) -> Response:
+        if version:
+            self.headers['VERSION'] = version
+
+        if method == 'POST':
+            response = requests.post(url, json=payload, headers=self.headers)
+        else:
+            response = requests.get(url, headers=self.headers)
+
+        return response
 
     def get_headers(self) -> dict:
         headers = {
@@ -93,28 +107,120 @@ class IGService(object):
         else:
             raise IGServiceError
 
+    def get_specific_watchlist(self) -> dict:
+        self.get_token()
+
+        url = self._get_endpoint('SPECIFIC_WATCHLIST').format('Popular Markets')
+        response = self._make_request(url, version='1')
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['markets']
+        else:
+            raise IGServiceError
+
+    def get_navigation_list(self) -> dict:
+        self.get_token()
+
+        url = self._get_endpoint('INSTRUMENT_LIST')
+        response = self._make_request(url, version='1')
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['nodes']
+        else:
+            raise IGServiceError
+
+    def get_node_list(self, node_id) -> dict:
+        self.get_token()
+
+        url = self._get_endpoint('NODE_NAVIGATION').format(node_id)
+        response = self._make_request(url, version='1')
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['nodes']
+        else:
+            raise IGServiceError
+
     def get_prices(self):
         # TODO
 
         self.get_token()
 
-        url = self._get_endpoint('PRICES').format('KA.D.EZJ.DAILY.IP')
+        url = self._get_endpoint('PRICES').format('KA.D.VOD.CASH.IP')
 
         response = self._make_request(url, version='3')
 
-    def _get_endpoint(self, endpoint: str) -> str:
-        return self.api_base_url + settings.IG['URLS'][endpoint]
+    def get_account_useful_data(self):
+        self.get_token()
+        url = self._get_endpoint('ACCOUNT_USEFUL_DATA')
+        response = self._make_request(url, version='2')
 
-    def _make_request(self, url, payload=None, method='GET', version=None) -> Response:
-        if version:
-            self.headers['VERSION'] = version
-
-        if method == 'POST':
-            response = requests.post(url, json=payload, headers=self.headers)
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['positions']
         else:
-            response = requests.get(url, headers=self.headers)
+            raise IGServiceError
 
-        return response
+    def create_position(self, payload: dict) -> dict:
+        self.get_token()
+        url = self._get_endpoint('CREATE_POSITION')
+
+        cleaned_payload = {
+            'currencyCode': payload['currency_code'],
+            'dealReference': payload['deal_reference'],
+            'direction': payload['direction'],
+            'epic': payload['epic'],
+            'expiry': payload['expiry'],
+            'forceOpen': payload['force_open'],
+            'guaranteedStop': payload['guaranteed_stop'],
+            'orderType': payload['order_type'],
+            'size': payload['size'],
+            'stopLevel': payload['stop_level'],
+        }
+        response = self._make_request(
+            url,
+            payload=cleaned_payload,
+            method='POST',
+            version='2'
+        )
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict
+        else:
+            raise IGServiceError(
+                "Error creating a position: {}".format(response.content)
+            )
+
+    def confirm_position(self, deal_ref: dict) -> dict:
+        self.get_token()
+
+        url = self._get_endpoint('CONFIRM_POSITION').format(deal_ref['dealReference'])
+        response = self._make_request(url, version='1')
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict
+        raise IGServiceError("Error creating a position: {}".format(response.content))
+
+    def open_position(self, deal_id: dict) -> dict:
+        self.get_token()
+
+        url = self._get_endpoint('OPEN_POSITION').format(deal_id['dealId'])
+        response = self._make_request(url, version='2')
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict
+        raise IGServiceError("Error creating a position: {}".format(response.content))
+
+    def open_position_wrapper(self, payload: dict):
+        self.get_token()
+
+        deal_ref = self.create_position(payload)
+        deal_id = self.confirm_position(deal_ref)
+        open_position_data = self.open_position(deal_id)
+        return open_position_data
 
 
 def get_ig_api() -> IGService:

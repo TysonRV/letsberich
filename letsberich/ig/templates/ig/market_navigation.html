@@ -1,0 +1,31 @@
+{% extends 'ig/base.html' %}
+
+{% block title %}Market Navigation{% endblock %}
+
+{% block content %}
+    <div>
+        {% if api_error %}
+            <div>{{ api_error }}</div>
+        {% endif %}
+        <form action="{% url 'market-navigation' %}" method="post" >
+            {% csrf_token %}
+            <button type="submit">Download Markets</button>
+        </form>
+    </div>
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>Instrument ID</th>
+                <th>Instrument Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for instrument in instrument_list %}
+            <tr>
+                <td><li><a href="{% url 'node-navigation' instrument.id %}">{{ instrument.id }}</a></li></td>
+                <td>{{ instrument.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

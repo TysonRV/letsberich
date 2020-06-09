@@ -1,0 +1,33 @@
+{% extends 'ig/base.html' %}
+
+{% block title %}Popular markets{% endblock %}
+
+{% block content %}
+    <div>
+        {% if api_error %}
+            <div>{{ api_error }}</div>
+        {% endif %}
+        <form action="{% url 'ig-popular_markets' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Show Popular Markets</button>
+        </form>
+    </div>
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>Instrument Name</th>
+                <th>Epic</th>
+                <th>Market Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for watchlist in watchlists_popular%}
+            <tr>
+                <td>{{ watchlist.instrumentName }}</td>
+                <td>{{ watchlist.epic }}</td>
+                <td>{{ watchlist.marketStatus }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

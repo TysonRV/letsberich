@@ -1,0 +1,40 @@
+{% extends 'ig/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Open Position{% endblock %}
+
+{% block content %}
+    <div class="col-12 p-5">
+        <div>
+            {% if api_error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ api_error }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-8 p-2">
+                <form action="{% url 'open-position' %}" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-success">Open Position</button>
+                </form>
+            </div>
+
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>Created date</th>
+                <th>Deal ID</th>
+                <th>Deal Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ created_position_data.position.createdDate }}</td>
+                <td>{{ created_position_data.position.dealId }}</td>
+                <td>{{ created_position_data.position.level }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'letsberich.ig',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -123,6 +124,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# IG
 IG = {
     'ACCOUNT_ID_SPREAD_BET': config('IG_ACCOUNT_ID_SPREAD_BET'),
     'ACCOUNT_ID_CFD': config('IG_ACCOUNT_ID_CFD'),
@@ -134,6 +136,16 @@ IG = {
         'GET_TOKEN': '/session',
         'REFRESH_TOKEN': '/session/refresh-token',
         'WATCHLISTS': '/watchlists',
-        'PRICES': '/prices/{}'
+        'PRICES': '/prices/{}',
+        'SPECIFIC_WATCHLIST': '/watchlists/{}',
+        'INSTRUMENT_LIST': '/marketnavigation',
+        'NODE_NAVIGATION': '/marketnavigation/{}',
+        'ACCOUNT_USEFUL_DATA': '/positions',
+        'CREATE_POSITION': '/positions/otc',
+        'CONFIRM_POSITION': '/confirms/{}',
+        'OPEN_POSITION': '/positions/{}'
     }
 }
+
+# Crispy Forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
