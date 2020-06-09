@@ -222,6 +222,12 @@ class IGService(object):
         open_position_data = self.open_position(deal_id)
         return open_position_data
 
+    def get_instrument(self):
+        return 1
 
+    def get_live_data(self):
+        return 1
+
+    
 def get_ig_api() -> IGService:
     return IGService()

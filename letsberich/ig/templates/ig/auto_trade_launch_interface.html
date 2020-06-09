@@ -1,0 +1,48 @@
+{% extends 'ig/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Operate Auto Trade Tool{% endblock %}
+
+{% block content %}
+    <div class="col-12 p-5">
+        <div>
+            {% if api_error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ api_error }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-8 p-2">
+                <form action="{% url 'start_auto_trade' %}" method="post">
+                    {% csrf_token %}
+                    {{ form_auto_trade|crispy }}
+                    <button type="submit" class="btn btn-success">Start Auto Trade</button>
+                </form>
+            </div>
+        <div class="row">
+            <div class="col-8 p-2">
+                <form action="{% url 'pause_auto_trade' %}" method="get">
+                    <button type="submit" class="btn btn-success">Pause Auto Trade</button>
+                </form>
+        </div>
+        <div class="row">
+            <div class="col-8 p-2">
+                <form action="{% url 'auto_trade_status' %}" method="get">
+                    <button type="submit" class="btn btn-success">Strategy Status</button>
+                </form>
+        </div>
+
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>Auto Trade Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ status }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
