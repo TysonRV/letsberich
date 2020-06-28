@@ -141,14 +141,16 @@ class IGService(object):
         else:
             raise IGServiceError
 
-    def get_prices(self):
-        # TODO
-
+    def get_instrument_characteristics(self, epic: str):
         self.get_token()
-
-        url = self._get_endpoint('PRICES').format('KA.D.VOD.CASH.IP')
-
+        url = self._get_endpoint('GET_INSTRUMENT_CHARACTERISTICS').format(epic)
         response = self._make_request(url, version='3')
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict
+        else:
+            raise IGServiceError
 
     def get_account_useful_data(self):
         self.get_token()
@@ -222,12 +224,29 @@ class IGService(object):
         open_position_data = self.open_position(deal_id)
         return open_position_data
 
-    def get_instrument(self):
+    def get_instrument_list(self) -> dict:
+        self.get_token()
+        url = self._get_endpoint('SPECIFIC_WATCHLIST').format('12047692') #weekend_watch is 12047692; pm_watchlist id is 11899563. ftse_watchlist is 11899563
+        response = self._make_request(url, version='1')
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['markets']
+        raise IGServiceError("Error getting watchlist: {}".format(response.content))
+
+    def get_past_price(self, instrument: dict, data_points: int):
+        self.get_token()
+        url = self._get_endpoint('GET_HISTORICAL_PRICES').format(instrument['epic'], 'MINUTE', data_points)
+        response = self._make_request(url, version='2')
+
+        if response.status_code < 300:
+            response_dict = json.loads(response.content.decode('utf-8'))
+            return response_dict['prices']
+
+        raise IGServiceError("Error getting past price: {}".format(response.content))
+
+    def close_position_wrapper(self): #TODO
         return 1
 
-    def get_live_data(self):
-        return 1
-
-    
 def get_ig_api() -> IGService:
     return IGService()

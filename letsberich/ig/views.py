@@ -129,15 +129,18 @@ class IGAutoTradeStart(generic.View):
     def get(self, request):
         day_strat = get_strategy()
         context = {}
-        context['status'] = day_strat.get_status('ON')
-        return render(request, 'ig/auto_trade_launch_interface.html', context)
+        context['data'] = day_strat.get_status('ON')
+        return render(request, 'ig/auto_trade_launch_interface.html', {'transactions': context['data']['transactions'],
+                                                                       'status': context['data']['status']})
 
 class IGAutoTradePause(generic.View):
 
     def get(self, request):
         context = {}
-        context['status'] = day_strat.get_status('OFF')
-        return render(request, 'ig/auto_trade_launch_interface.html', context)
+        day_strat = get_strategy()
+        context['data'] = day_strat.get_status('OFF')
+        return render(request, 'ig/auto_trade_launch_interface.html', {'transactions': context['data']['transactions'],
+                                                                       'status': context['data']['status']})
 
 
 class IGAutoTradeStatus(generic.View):
@@ -145,5 +148,7 @@ class IGAutoTradeStatus(generic.View):
 
     def get(self, request):
         context = {}
-        context['status'] = strategy_one()
-        return render(request, 'ig/auto_trade_launch_interface.html', context)
+        day_strat = get_strategy()
+        context['data'] = day_strat.get_status()
+        return render(request, 'ig/auto_trade_launch_interface.html', {'transactions': context['data']['transactions'],
+                                                                       'status': context['data']['status']})

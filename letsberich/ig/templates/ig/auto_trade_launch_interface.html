@@ -13,36 +13,61 @@
             {% endif %}
         </div>
         <div class="row">
-            <div class="col-8 p-2">
-                <form action="{% url 'start_auto_trade' %}" method="post">
-                    {% csrf_token %}
-                    {{ form_auto_trade|crispy }}
-                    <button type="submit" class="btn btn-success">Start Auto Trade</button>
-                </form>
-            </div>
-        <div class="row">
-            <div class="col-8 p-2">
-                <form action="{% url 'pause_auto_trade' %}" method="get">
-                    <button type="submit" class="btn btn-success">Pause Auto Trade</button>
-                </form>
+            <a href="{% url 'start-auto-trade' %}">
+                <button type="submit" class="btn btn-success">Start Auto Trade</button>
+            </a>
         </div>
         <div class="row">
-            <div class="col-8 p-2">
-                <form action="{% url 'auto_trade_status' %}" method="get">
-                    <button type="submit" class="btn btn-success">Strategy Status</button>
-                </form>
+            <a href="{% url 'pause-auto-trade' %}">
+                <button type="submit" class="btn btn-success">Pause Auto Trade</button>
+            </a>
         </div>
-
+        <div class="row">
+            <a href="{% url 'status-auto-trade' %}">
+                <button type="submit" class="btn btn-success">Strategy Status</button>
+            </a>
+        </div>
+    </div>
     <table style="border: 1px solid black">
         <thead>
             <tr>
-                <th>Auto Trade Status</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>{{ status }}</td>
             </tr>
+        </tbody>
+    </table>
+
+    <table style="border: 3px solid blue">
+        <thead>
+            <tr>
+                <th>Instrument</th>
+                <th>Epic</th>
+                <th>Size</th>
+                <th>Buy Price</th>
+                <th>Limit Level</th>
+                <th>Date</th>
+                <th>Deal ID (IG)</th>
+                <th>Deal Ref (ours)</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.market.instrumentName }}</td>
+                    <td>{{ transaction.market.epic }}</td>
+                    <td>{{ transaction.position.size }}</td>
+                    <td>{{ transaction.position.level }}</td>
+                    <td>{{ transaction.position.limitLevel }}</td>
+                    <td>{{ transaction.position.createdDate }}</td>
+                    <td>{{ transaction.position.dealId }}</td>
+                    <td>{{ transaction.position.dealReference }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}

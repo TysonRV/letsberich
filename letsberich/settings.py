@@ -143,7 +143,9 @@ IG = {
         'ACCOUNT_USEFUL_DATA': '/positions',
         'CREATE_POSITION': '/positions/otc',
         'CONFIRM_POSITION': '/confirms/{}',
-        'OPEN_POSITION': '/positions/{}'
+        'OPEN_POSITION': '/positions/{}',
+        'GET_HISTORICAL_PRICES': '/prices/{}/{}/{}',
+        'GET_INSTRUMENT_CHARACTERISTICS': '/markets/{}'
     }
 }
 

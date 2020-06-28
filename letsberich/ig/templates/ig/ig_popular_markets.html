@@ -7,7 +7,7 @@
         {% if api_error %}
             <div>{{ api_error }}</div>
         {% endif %}
-        <form action="{% url 'ig-popular_markets' %}" method="post">
+        <form action="{% url 'ig-popular-markets' %}" method="post">
             {% csrf_token %}
             <button type="submit">Show Popular Markets</button>
         </form>
