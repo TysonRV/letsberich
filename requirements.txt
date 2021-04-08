@@ -1,4 +1,4 @@
-Django==3.0.7                                         # web framework for Python
+Django==3.0.14                                         # web framework for Python
 django-crispy-forms==1.9.1                            # django forms with bootstrap
 python-decouple==3.3                                  # keeps your secrets safe
 requests==2.23.0                                      # module to perform url calls
