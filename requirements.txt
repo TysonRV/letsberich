@@ -1,6 +1,33 @@
-Django==3.0.7                                         # web framework for Python
-django-crispy-forms==1.9.1                            # django forms with bootstrap
-python-decouple==3.3                                  # keeps your secrets safe
-requests==2.23.0                                      # module to perform url calls
-
-ipdb==0.13.2                                          # pdb on steroids
+asgiref==3.2.7
+backcall==0.1.0
+certifi==2020.4.5.1
+chardet==3.0.4
+decorator==4.4.2
+Django==3.0.7
+django-crispy-forms==1.9.1
+get==2019.4.13
+idna==2.9
+ipdb==0.13.2
+ipython==7.15.0
+ipython-genutils==0.2.0
+jedi==0.17.0
+numpy==1.18.5
+pandas==1.0.4
+parso==0.7.0
+pexpect==4.8.0
+pickleshare==0.7.5
+post==2019.4.13
+prompt-toolkit==3.0.5
+ptyprocess==0.6.0
+public==2019.4.13
+Pygments==2.6.1
+python-dateutil==2.8.1
+python-decouple==3.3
+pytz==2020.1
+query-string==2019.4.13
+requests==2.23.0
+six==1.15.0
+sqlparse==0.3.1
+traitlets==4.3.3
+urllib3==1.25.9
+wcwidth==0.1.9

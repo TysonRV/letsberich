@@ -1,0 +1,73 @@
+{% extends 'ig/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Operate Auto Trade Tool{% endblock %}
+
+{% block content %}
+    <div class="col-12 p-5">
+        <div>
+            {% if api_error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ api_error }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <a href="{% url 'start-auto-trade' %}">
+                <button type="submit" class="btn btn-success">Start Auto Trade</button>
+            </a>
+        </div>
+        <div class="row">
+            <a href="{% url 'pause-auto-trade' %}">
+                <button type="submit" class="btn btn-success">Pause Auto Trade</button>
+            </a>
+        </div>
+        <div class="row">
+            <a href="{% url 'status-auto-trade' %}">
+                <button type="submit" class="btn btn-success">Strategy Status</button>
+            </a>
+        </div>
+    </div>
+    <table style="border: 1px solid black">
+        <thead>
+            <tr>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table style="border: 3px solid blue">
+        <thead>
+            <tr>
+                <th>Instrument</th>
+                <th>Epic</th>
+                <th>Size</th>
+                <th>Buy Price</th>
+                <th>Limit Level</th>
+                <th>Date</th>
+                <th>Deal ID (IG)</th>
+                <th>Deal Ref (ours)</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.market.instrumentName }}</td>
+                    <td>{{ transaction.market.epic }}</td>
+                    <td>{{ transaction.position.size }}</td>
+                    <td>{{ transaction.position.level }}</td>
+                    <td>{{ transaction.position.limitLevel }}</td>
+                    <td>{{ transaction.position.createdDate }}</td>
+                    <td>{{ transaction.position.dealId }}</td>
+                    <td>{{ transaction.position.dealReference }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

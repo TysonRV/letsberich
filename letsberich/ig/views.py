@@ -3,6 +3,7 @@ from django.views import generic
 
 from letsberich.ig.exceptions import IGServiceError
 from letsberich.ig.ig_services import get_ig_api
+from letsberich.ig.strategy import get_strategy
 
 from letsberich.ig.forms import OpenPositionForm
 
@@ -121,3 +122,33 @@ class IGOpenPosition(generic.View):
                 context['created_position_data'] = created_position_data
 
         return render(request, 'ig/open_position.html', context)
+
+
+class IGAutoTradeStart(generic.View):
+
+    def get(self, request):
+        day_strat = get_strategy()
+        context = {}
+        context['data'] = day_strat.get_status('ON')
+        return render(request, 'ig/auto_trade_launch_interface.html', {'transactions': context['data']['transactions'],
+                                                                       'status': context['data']['status']})
+
+class IGAutoTradePause(generic.View):
+
+    def get(self, request):
+        context = {}
+        day_strat = get_strategy()
+        context['data'] = day_strat.get_status('OFF')
+        return render(request, 'ig/auto_trade_launch_interface.html', {'transactions': context['data']['transactions'],
+                                                                       'status': context['data']['status']})
+
+
+class IGAutoTradeStatus(generic.View):
+    ig_api = get_ig_api()
+
+    def get(self, request):
+        context = {}
+        day_strat = get_strategy()
+        context['data'] = day_strat.get_status()
+        return render(request, 'ig/auto_trade_launch_interface.html', {'transactions': context['data']['transactions'],
+                                                                       'status': context['data']['status']})

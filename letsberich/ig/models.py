@@ -41,3 +41,9 @@ class Position(models.Model):
     )
 
 
+class Autotrade(models.Model):
+    status = models.CharField(
+        max_length=7,
+        help_text="This activates the Auto Trade tool",
+        choices=(("ON", "TURN ON"), ("OFF", "TURN OFF"), ("STATUS", "STATUS")),
+    )
